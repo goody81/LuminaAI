@@ -1,0 +1,33 @@
+name: bootstrap
+on: [push, workflow_dispatch]
+
+# FIX: Add concurrency control to cancel redundant runs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-22.04
+    steps:
+      # FIX: Add fetch-depth: 0 to get all history for tools like pre-commit
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # FIX: Add caching for pre-commit environments to speed up runs
+      - name: Cache pre-commit environments
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-cache-${{ hashFiles('.pre-commit-config.yaml') }}
+          restore-keys: |
+            pre-commit-cache-
+
+      - name: Install and run pre-commit
+        run: pip install pre-commit && pre-commit run --all-files
