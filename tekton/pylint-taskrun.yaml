@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: pylint-run
+  namespace: bmad
+spec:
+  taskRef:
+    name: pylint
+  workspaces:
+    - name: source
+      hostPath:
+        path: /workspace/source
+        type: Directory

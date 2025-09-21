@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package planner;
+
+// The Planner service definition.
+service Planner {
+  // Sends a prompt to the planner and receives a plan.
+  rpc Plan(PlanRequest) returns (PlanResponse) {}
+}
+
+// The request message containing the user's prompt.
+message PlanRequest {
+  string prompt = 1;
+}
+
+// The response message containing the plan.
+message PlanResponse {
+  // The plan, represented as a Directed Acyclic Graph (DAG) in JSON format.
+  string dag = 1;
+}
