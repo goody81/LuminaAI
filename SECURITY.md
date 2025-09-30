@@ -6,7 +6,7 @@ The BMAD team and community take all security vulnerabilities seriously. Thank y
 
 To report a security issue, please email our security team at `security@bmad.ai` and include the word "SECURITY" in the subject line.
 
-We will endevaor to respond within 24 hours.
+We will endeavor to respond within 24 hours.
 
 ## PGP Key for Security Communications
 
