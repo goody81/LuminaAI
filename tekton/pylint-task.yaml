@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: pylint
+spec:
+  workspaces:
+    - name: source
+      description: The workspace containing the source code to lint.
+  steps:
+    - name: lint
+      image: python:3.8-slim
+      script: |
+        #!/bin/bash
+        pip install pylint
+        pylint $(workspaces.source.path)/agents

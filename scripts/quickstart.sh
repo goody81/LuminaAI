@@ -4,13 +4,22 @@
 
 echo "🚀 Starting BMAD quickstart..."
 
+# Create namespaces
+echo "Creating namespaces..."
+kubectl create namespace bmad-prod || true
+kubectl create namespace bmad || true
+
 # Apply Kubernetes manifests
 echo "Applying core manifests..."
 kubectl apply -k clusters/bmad-prod/apps
 
+# Apply Tekton manifests
+echo "Applying Tekton manifests..."
+kubectl apply -f tekton/
+
 # Wait for deployments to be ready
 echo "Waiting for deployments to be ready..."
-kubectl wait --for=condition=Available deployment/bmad-core -n bmad-prod --timeout=300s
+kubectl wait --for=condition=Available deployment/planner -n bmad-prod --timeout=300s
 
 # The review also mentioned this line:
 # kubectl wait --for=condition=Succeeded taskrun --all -n bmad --timeout=120s
@@ -22,7 +31,7 @@ echo "✅ BMAD environment is ready."
 echo "Forwarding Grafana port to localhost:3000..."
 
 # This command will run in the background
-kubectl port-forward svc/grafana 3000:3000 -n bmad >/dev/null 2>&1 &
+kubectl port-forward svc/kube-prometheus-stack-grafana 3000:3000 -n bmad-prod >/dev/null 2>&1 &
 PORT_FORWARD_PID=$!
 
 echo "Grafana is now accessible at http://localhost:3000"
